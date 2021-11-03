@@ -4,11 +4,11 @@ from channels.generic.websocket import WebsocketConsumer
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_group_name = 'chat_console'
+        self.room_group_name = 'chat_boat'
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            'chat_console',
+            'chat_boat',
             self.channel_name
         )
 
@@ -17,7 +17,7 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            'chat_console',
+            'chat_boat',
             self.channel_name
         )
 
@@ -26,13 +26,6 @@ class ChatConsumer(WebsocketConsumer):
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             'chat_console',
-            {
-                'type': 'chat_message',
-                'message': text_data
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            'chat_boat',
             {
                 'type': 'chat_message',
                 'message': text_data
