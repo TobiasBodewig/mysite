@@ -28,7 +28,7 @@ class ChatConsumer(WebsocketConsumer):
             'chat_console',
             {
                 'type': 'chat_message',
-                'message': text_data
+                'message': '[Console] ' + text_data
             }
         )
         async_to_sync(self.channel_layer.group_send)(

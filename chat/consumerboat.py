@@ -15,7 +15,7 @@ class ChatConsumer(WebsocketConsumer):
             'chat_console',
             {
                 'type': 'chat_message',
-                'message': '[Server]Boat connected'
+                'message': '[Server]  Boat connected'
             }
         )
 
@@ -31,7 +31,7 @@ class ChatConsumer(WebsocketConsumer):
             'chat_console',
             {
                 'type': 'chat_message',
-                'message': '[Server]Boat disconnected'
+                'message': '[Server]  Boat disconnected'
             }
         )
 
@@ -44,7 +44,7 @@ class ChatConsumer(WebsocketConsumer):
             'chat_console',
             {
                 'type': 'chat_message',
-                'message': text_data
+                'message': '[Boat]    ' + text_data
             }
         )
 
