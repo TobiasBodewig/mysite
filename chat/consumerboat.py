@@ -11,6 +11,13 @@ class ChatConsumer(WebsocketConsumer):
             'chat_boat',
             self.channel_name
         )
+        async_to_sync(self.channel_layer.group_send)(
+            'chat_console',
+            {
+                'type': 'chat_message',
+                'message': '[Server]Boat connected'
+            }
+        )
 
         self.accept()
 
@@ -20,10 +27,19 @@ class ChatConsumer(WebsocketConsumer):
             'chat_boat',
             self.channel_name
         )
+        async_to_sync(self.channel_layer.group_send)(
+            'chat_console',
+            {
+                'type': 'chat_message',
+                'message': '[Server]Boat disconnected'
+            }
+        )
 
     # Receive message from WebSocket
     def receive(self, text_data):
         # Send message to room group
+        if text_data == '-ping-':
+            return
         async_to_sync(self.channel_layer.group_send)(
             'chat_console',
             {
