@@ -4,10 +4,28 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
+    <style>
+        #chat-log {
+            width: 800px;
+            height: 500px;
+            overflow: auto;
+            border-style: solid;
+            border-width: 1px;
+        }
+        .chat-text-server, .chat-text-console, .chat-text-boat, .chat-text-enter {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: medium;
+            white-space: pre;
+        }
+        .chat-text-server { color: green}
+        .chat-text-console { color: blue}
+        .chat-text-boat { color: black}
+        .chat-text-enter { color: black}
+    </style>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="30"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
+    <div id='chat-log' contenteditable width="400px" height="160px"></div><br>
+    <input id="chat-message-input" class="chat-text-enter" type="text" size="80"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     <script>
@@ -18,8 +36,20 @@
         );
 
         chatSocket.onmessage = function(e) {
-            const data = e.data;
-            document.querySelector('#chat-log').value += (data+ '\n');
+            var data = e.data;
+            var textClass = "chat-text";
+            if (data.startsWith("[Server]")) {
+                textClass += "-server"
+            } else if (data.startsWith("[Console]")) {
+                textClass += "-console"
+            } else if (data.startsWith("[Boat]")) {
+                textClass += "-boat"
+            }
+            var line = document.createElement("span");
+            line.className = textClass;
+            line.textContent = data;
+            document.querySelector('#chat-log').appendChild(line);
+            document.querySelector('#chat-log').appendChild(document.createElement("br"));
         };
 
         chatSocket.onclose = function(e) {
